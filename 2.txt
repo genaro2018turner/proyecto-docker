@@ -1,0 +1,116 @@
+2. frontend/script.js
+
+Cambios: Tarea 2 (saludo), Tarea 4 (agregar estudiante y actualización automática).
+
+// Función para cargar estudiantes (reutilizable)
+async function loadStudents() {
+  try {
+    const response = await fetch("/api/students");
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+    const students = await response.json();
+    const tbody = document.querySelector("#studentsTable tbody");
+    tbody.innerHTML = "";
+    
+    if (students.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #6b7280;">No hay estudiantes registrados</td></tr>`;
+      return;
+    }
+    
+    students.forEach((student) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${student.id}</td><td>${student.name}</td>`;
+      tbody.appendChild(row);
+    });
+  } catch (error) {
+    console.error("Error al cargar estudiantes:", error);
+    const tbody = document.querySelector("#studentsTable tbody");
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #ef4444;">Error al cargar estudiantes</td></tr>`;
+  }
+}
+
+// Tarea 2: Funcionalidad de Saludo
+document.getElementById("greetButton").addEventListener("click", async () => {
+  const nameInput = document.getElementById("greetName");
+  const name = nameInput.value.trim();
+  const messageElement = document.getElementById("greetMessage");
+  
+  if (!name) {
+    messageElement.textContent = " Por favor, escribe tu nombre";
+    messageElement.style.color = "#ef4444";
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/api/greet?name=${encodeURIComponent(name)}`);
+    const data = await response.json();
+    messageElement.textContent = data.message;
+    messageElement.style.color = "#374151";
+  } catch (error) {
+    messageElement.textContent = " Error al obtener el saludo";
+    messageElement.style.color = "#ef4444";
+    console.error("Error:", error);
+  }
+});
+
+// Permitir enviar con Enter en el saludo
+document.getElementById("greetName").addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    document.getElementById("greetButton").click();
+  }
+});
+
+// Tarea 4: Funcionalidad para agregar estudiantes
+document.getElementById("addStudentButton").addEventListener("click", async () => {
+  const nameInput = document.getElementById("newStudentName");
+  const name = nameInput.value.trim();
+  const messageElement = document.getElementById("addStudentMessage");
+  
+  if (!name) {
+    messageElement.textContent = " Por favor, ingresa un nombre";
+    messageElement.style.color = "#ef4444";
+    return;
+  }
+  
+  try {
+    const response = await fetch("/api/students", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    });
+    
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error || `Error ${response.status}: ${response.statusText}`);
+    }
+    
+    messageElement.textContent = ` Estudiante "${data.name}" agregado con ID: ${data.id}`;
+    messageElement.style.color = "#10b981";
+    nameInput.value = "";
+    
+    // Recargar automáticamente la tabla
+    await loadStudents();
+    
+  } catch (error) {
+    console.error("Error al agregar estudiante:", error);
+    messageElement.textContent = ` Error: ${error.message || "No se pudo agregar el estudiante"}`;
+    messageElement.style.color = "#ef4444";
+  }
+});
+
+// Permitir enviar con Enter en el campo de nuevo estudiante
+document.getElementById("newStudentName").addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    document.getElementById("addStudentButton").click();
+  }
+});
+
+// Evento para cargar estudiantes manualmente (botón existente)
+document.getElementById("loadButton").addEventListener("click", loadStudents);
+
+// Cargar estudiantes automáticamente al cargar la página
+document.addEventListener("DOMContentLoaded", loadStudents);

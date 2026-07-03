@@ -1,0 +1,59 @@
+1. frontend/index.html
+
+Cambios: Tarea 0 (estilo moderno), Tarea 2 (saludo), Tarea 4 (formulario agregar estudiante).
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Estudiantes</title>
+    <link rel="stylesheet" href="styles_modern.css" /> <!-- Tarea 0 -->
+  </head>
+  <body>
+    <h1>Lista de Estudiantes</h1>
+    
+    <!-- Tarea 2: Sección de Saludo -->
+    <div style="margin: 20px 0; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-width: 400px; margin-left: auto; margin-right: auto;">
+      <h2 style="color: #2d3a4a; font-size: 1.3rem; margin-top: 0;">Saludar</h2>
+      <input 
+        type="text" 
+        id="greetName" 
+        placeholder="Escribe tu nombre" 
+        style="padding: 10px 16px; border: 2px solid #e0e7ff; border-radius: 25px; font-size: 1rem; width: 60%; margin-right: 10px; outline: none; transition: border-color 0.3s;"
+        onfocus="this.style.borderColor='#6366f1'"
+        onblur="this.style.borderColor='#e0e7ff'"
+      >
+      <button id="greetButton" style="padding: 10px 20px; font-size: 1rem; border: none; border-radius: 25px; background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%); color: #fff; font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.2s;">Saludarme</button>
+      <p id="greetMessage" style="margin-top: 15px; font-size: 1.1rem; color: #374151; min-height: 30px;"></p>
+    </div>
+
+    <!-- Tarea 4: Formulario para agregar estudiantes -->
+    <div style="margin: 20px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-width: 400px;">
+      <h2 style="color: #2d3a4a; font-size: 1.3rem; margin-top: 0;">Agregar Estudiante</h2>
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <input 
+          type="text" 
+          id="newStudentName" 
+          placeholder="Nombre del estudiante" 
+          style="padding: 10px 16px; border: 2px solid #e0e7ff; border-radius: 25px; font-size: 1rem; flex: 1; min-width: 150px; outline: none; transition: border-color 0.3s;"
+          onfocus="this.style.borderColor='#6366f1'"
+          onblur="this.style.borderColor='#e0e7ff'"
+        >
+        <button id="addStudentButton" style="padding: 10px 20px; font-size: 1rem; border: none; border-radius: 25px; background: linear-gradient(90deg, #10b981 0%, #34d399 100%); color: #fff; font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.2s;">Agregar Estudiante</button>
+      </div>
+      <p id="addStudentMessage" style="margin-top: 15px; font-size: 0.95rem; color: #374151; min-height: 25px;"></p>
+    </div>
+
+    <button id="loadButton">Cargar Estudiantes</button>
+    <table id="studentsTable">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nombre</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <script src="script.js"></script>
+  </body>
+</html>

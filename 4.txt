@@ -1,0 +1,18 @@
+4. backend/Dockerfile
+
+Cambio: Tarea 3 (EXPOSE 4000).
+
+FROM node:lts-alpine3.21
+
+# Update Alpine packages to reduce vulnerabilities
+RUN apk update && apk upgrade --no-cache
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 4000  # Tarea 3: cambio de 3000 a 4000
+CMD ["node", "index.js"]
